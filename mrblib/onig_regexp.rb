@@ -58,6 +58,30 @@ class OnigRegexp
 end
 
 class OnigMatchData
+  # https://github.com/mruby/mruby/pull/7281 or later use __group,
+  # __pre_match, __post_match and __last_group for $&, $1..$9, $`, $'
+  # and $+.
+
+  def __group(n)
+    self[n]
+  end
+
+  def __pre_match
+    pre_match
+  end
+
+  def __post_match
+    post_match
+  end
+
+  def __last_group
+    last = nil
+    captures.each do |capture|
+      last = capture if capture
+    end
+    last
+  end
+
   def named_captures(symbolize_names: false)
     names.to_h do |name|
       n = symbolize_names ? name.to_sym : name

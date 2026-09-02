@@ -323,6 +323,30 @@ assert('OnigMatchData#names') do
   assert_equal %w[a b c], m.names
 end
 
+assert('OnigMatchData#__group') do
+  m = onig_match_data_example
+  assert_equal 'aaabb', m.__group(0)
+  assert_equal 'aaab', m.__group(1)
+  assert_equal 'b', m.__group(2)
+  assert_nil m.__group(3)
+end
+
+assert('OnigMatchData#__pre_match') do
+  assert_equal '+', onig_match_data_example.__pre_match
+end
+
+assert('OnigMatchData#__post_match') do
+  assert_equal '-', onig_match_data_example.__post_match
+end
+
+assert('OnigMatchData#__last_group') do
+  assert_equal 'b', onig_match_data_example.__last_group
+
+  assert_equal 'a', OnigRegexp.new('(a)(b)?').match('ac').__last_group
+
+  assert_nil OnigRegexp.new('a').match('a').__last_group
+end
+
 assert('Invalid regexp') do
   assert_raise(RegexpError) { OnigRegexp.new '[aio' }
 end
